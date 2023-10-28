@@ -3,13 +3,15 @@ package donat.udvari.snake.controller
 import donat.udvari.snake.model.InitResponse
 import donat.udvari.snake.model.MoveResponse
 import donat.udvari.snake.model.PostMessage
+import donat.udvari.snake.service.DirectionService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class SnakeController {
+class SnakeController(val directionService: DirectionService) {
 
     @GetMapping
     fun getInitAnswer(): InitResponse {
@@ -31,7 +33,7 @@ class SnakeController {
     @PostMapping("move")
     fun postMove(@RequestBody message: PostMessage): MoveResponse {
         return MoveResponse(
-            move = if (message.turn % 2 == 0) "up" else "left",
+            move = directionService.getDirection(message).value,
             shout = "AAAA"
         )
     }

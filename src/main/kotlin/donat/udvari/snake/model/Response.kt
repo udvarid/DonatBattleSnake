@@ -11,6 +11,10 @@ data class InitResponse(
 
 data class MoveResponse(val move: String, val shout: String)
 
+enum class Direction(val value: String){
+    UP("up"), DOWN("down"), LEFT("left"), RIGHT("right")
+}
+
 
 
 
