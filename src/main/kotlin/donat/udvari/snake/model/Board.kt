@@ -1,5 +1,7 @@
 package donat.udvari.snake.model
 
+import kotlin.math.abs
+
 data class Board (
     val height: Int,
     val width: Int,
@@ -16,4 +18,6 @@ data class Coordinate(val x: Int, val y: Int) {
             Direction.RIGHT -> Coordinate(x = this.x + 1, y = this.y)
             Direction.LEFT -> Coordinate(x = this.x - 1, y = this.y)
         }
+
+    fun distance(other: Coordinate): Int = abs(this.x - other.x) + abs(this.y - other.y)
 }

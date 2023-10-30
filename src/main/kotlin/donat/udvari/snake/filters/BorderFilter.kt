@@ -5,6 +5,9 @@ import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 
+/**
+ * Filtering out the moves where the snake would go out from the board
+ */
 @Service
 @Order(2)
 class BorderFilter: DirectionFilter {

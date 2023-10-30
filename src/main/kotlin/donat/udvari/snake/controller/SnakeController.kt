@@ -18,9 +18,9 @@ class SnakeController(val directionService: DirectionService) {
         return InitResponse(
             "1",
             "DonatO",
-            "#2da7e4",
-            "default",
-            "default",
+            "#ccae0c",
+            "viper",
+            "tiger-tail",
             "0.0.1-beta"
         )
     }

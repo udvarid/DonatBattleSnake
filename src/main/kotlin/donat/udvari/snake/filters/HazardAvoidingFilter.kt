@@ -6,18 +6,18 @@ import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 
 /**
- * Filtering out the direction where the snake would collide with other snakes
+    Avoiding - with prioritize decrease - the obstacles
  */
 @Service
-@Order(3)
-class BodyObstackleFilter: DirectionFilter {
+@Order(4)
+class HazardAvoidingFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         val validDirections = moves.toList().filter { it.second != -1 }.map { it.first }
-        val bodyParts = message.board.snakes.flatMap { it.body }.toSet()
+        val hazards = message.board.hazards
         val myHead = message.you.head
         for (direction in validDirections) {
-            if (bodyParts.contains(myHead.neighbour(direction))) {
-                moves.replace(direction, -1)
+            if (hazards.contains(myHead.neighbour(direction))) {
+                moves.merge(direction, 1, Int::minus)
             }
         }
     }
