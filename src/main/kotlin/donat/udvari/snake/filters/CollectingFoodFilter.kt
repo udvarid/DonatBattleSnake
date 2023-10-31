@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service
 class CollectingFoodFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         if (message.you.health < ENERGY_LIMIT) {
-            val validDirections = moves.toList().filter { it.second != -1 }.map { it.first }
+            val validDirections = moves.toList().filter { it.second >= 0 }.map { it.first }
             val myHead = message.you.head
             val food = message.board.food
             if (food.isNotEmpty()) {

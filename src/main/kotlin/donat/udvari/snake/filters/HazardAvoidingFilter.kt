@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service
 class HazardAvoidingFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         if (message.board.hazards.isNotEmpty()) {
-            val validDirections = moves.toList().filter { it.second != -1 }.map { it.first }
+            val validDirections = moves.toList().filter { it.second >= 0 }.map { it.first }
             val hazards = message.board.hazards
             val myHead = message.you.head
             for (direction in validDirections) {
