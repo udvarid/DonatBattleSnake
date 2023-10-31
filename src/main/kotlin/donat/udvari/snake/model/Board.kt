@@ -20,4 +20,11 @@ data class Coordinate(val x: Int, val y: Int) {
         }
 
     fun distance(other: Coordinate): Int = abs(this.x - other.x) + abs(this.y - other.y)
+    fun getNeighbours(): List<Coordinate> =
+        listOf(
+            Coordinate(this.x + 1, this.y),
+            Coordinate(this.x - 1, this.y),
+            Coordinate(this.x, this.y + 1),
+            Coordinate(this.x, this.y - 1)
+        ).filter { it.x >= 0 && it.y >= 0 }
 }
