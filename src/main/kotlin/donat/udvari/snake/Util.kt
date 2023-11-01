@@ -1,3 +1,3 @@
 package donat.udvari.snake
 
-const val ENERGY_LIMIT = 50
+const val ENERGY_LIMIT = 75

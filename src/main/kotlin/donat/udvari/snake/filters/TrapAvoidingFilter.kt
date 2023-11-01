@@ -1,5 +1,6 @@
 package donat.udvari.snake.filters
 
+import donat.udvari.snake.model.Coordinate
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
@@ -27,8 +28,6 @@ class TrapAvoidingFilter: DirectionFilter {
             }
         }
     }
-
-
 }
 
 private fun calculateFreeCells(board: Array<Array<Maze>>, y: Int, x: Int): Int {
@@ -60,7 +59,15 @@ private fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
     val width = message.board.width
     val board = Array(height) {Array(width) {Maze.UNVISITED} }
     val bodies = message.board.snakes.flatMap { it.body }
-    bodies.forEach {
+    val myTailCanCut = message.you.length == message.you.body.size
+    bodies.let {
+        return@let if (myTailCanCut) {
+            val myTail = message.you.body.last()
+            it.minus(myTail)
+        } else {
+            it
+        }
+    }.forEach {
         board[it.y][it.x] = Maze.SNAKE
     }
     return board

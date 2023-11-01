@@ -17,13 +17,13 @@ class HeadNeckFilter: DirectionFilter {
             val head = me.body[0]
             val neck = me.body[1]
             if (head.x == neck.x && head.y > neck.y) {
-                moves.replace(Direction.DOWN, -1)
+                moves.remove(Direction.DOWN)
             } else if (head.x == neck.x && head.y < neck.y) {
-                moves.replace(Direction.UP, -1)
+                moves.remove(Direction.UP)
             } else if (head.x > neck.x && head.y == neck.y) {
-                moves.replace(Direction.LEFT, -1)
+                moves.remove(Direction.LEFT)
             } else if (head.x < neck.x && head.y == neck.y) {
-                moves.replace(Direction.RIGHT, -1)
+                moves.remove(Direction.RIGHT)
             }
         }
     }

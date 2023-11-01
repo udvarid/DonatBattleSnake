@@ -13,11 +13,13 @@ import org.springframework.stereotype.Service
 class BodyObstackleFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         val validDirections = moves.toList().filter { it.second >= 0 }.map { it.first }
-        val bodyParts = message.board.snakes.flatMap { it.body }
-        val myHead = message.you.head
-        for (direction in validDirections) {
-            if (bodyParts.contains(myHead.neighbour(direction))) {
-                moves.replace(direction, -1)
+        if (validDirections.size > 1) {
+            val bodyParts = message.board.snakes.flatMap { it.body }
+            val myHead = message.you.head
+            for (direction in validDirections) {
+                if (bodyParts.contains(myHead.neighbour(direction))) {
+                    moves.replace(direction, -1)
+                }
             }
         }
     }

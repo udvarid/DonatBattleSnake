@@ -15,14 +15,16 @@ class CollectingFoodFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         if (message.you.health < ENERGY_LIMIT) {
             val validDirections = moves.toList().filter { it.second >= 0 }.map { it.first }
-            val myHead = message.you.head
-            val food = message.board.food
-            if (food.isNotEmpty()) {
-                val closestFood = food.map { Pair(it, it.distance(myHead))}.minByOrNull { it.second }!!
-                for (direction in validDirections) {
-                    val possibleDestination = myHead.neighbour(direction)
-                    if (closestFood.second > possibleDestination.distance(closestFood.first)) {
-                        moves.merge(direction, 1, Int::plus)
+            if (validDirections.size > 1) {
+                val myHead = message.you.head
+                val food = message.board.food
+                if (food.isNotEmpty()) {
+                    val closestFood = food.map { Pair(it, it.distance(myHead))}.minByOrNull { it.second }!!
+                    for (direction in validDirections) {
+                        val possibleDestination = myHead.neighbour(direction)
+                        if (closestFood.second > possibleDestination.distance(closestFood.first)) {
+                            moves.merge(direction, 1, Int::plus)
+                        }
                     }
                 }
             }

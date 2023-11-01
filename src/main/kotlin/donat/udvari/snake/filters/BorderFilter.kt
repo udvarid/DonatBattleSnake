@@ -16,16 +16,16 @@ class BorderFilter: DirectionFilter {
         val yMax = message.board.height
         val myHead = message.you.head
         if (myHead.x == 0) {
-            moves.replace(Direction.LEFT, -1)
+            moves.remove(Direction.LEFT)
         }
         if (myHead.y == 0) {
-            moves.replace(Direction.DOWN, -1)
+            moves.remove(Direction.DOWN)
         }
         if (myHead.x == xMax - 1) {
-            moves.replace(Direction.RIGHT, -1)
+            moves.remove(Direction.RIGHT)
         }
         if (myHead.y == yMax -1) {
-            moves.replace(Direction.UP, -1)
+            moves.remove(Direction.UP)
         }
     }
 }
