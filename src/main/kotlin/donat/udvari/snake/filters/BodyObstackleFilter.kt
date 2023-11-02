@@ -18,7 +18,7 @@ class BodyObstackleFilter: DirectionFilter {
             val myHead = message.you.head
             for (direction in validDirections) {
                 if (bodyParts.contains(myHead.neighbour(direction))) {
-                    moves.replace(direction, -1)
+                    moves.replace(direction, -2)
                 }
             }
         }

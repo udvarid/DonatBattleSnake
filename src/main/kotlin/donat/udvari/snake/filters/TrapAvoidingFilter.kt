@@ -1,6 +1,7 @@
 package donat.udvari.snake.filters
 
-import donat.udvari.snake.model.Coordinate
+import donat.udvari.snake.Maze
+import donat.udvari.snake.getInitBoard
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
@@ -24,6 +25,8 @@ class TrapAvoidingFilter: DirectionFilter {
                 val numberOfCells = calculateFreeCells(board, possibleDirection.y, possibleDirection.x)
                 if (numberOfCells <= mySize) {
                     moves.merge(direction, 2, Int::minus)
+                } else if (numberOfCells <= mySize * 2) {
+                    moves.merge(direction, 1, Int::minus)
                 }
             }
         }
@@ -43,7 +46,6 @@ private fun calculateFreeCells(board: Array<Array<Maze>>, y: Int, x: Int): Int {
     return 1 + possibleFurtherCells.sumOf { calculateFreeCells(board, it.first, it.second) }
 }
 
-
 private fun clearVisited(board: Array<Array<Maze>>) {
     for (y in board.indices) {
         for (x in board[0].indices) {
@@ -53,24 +55,3 @@ private fun clearVisited(board: Array<Array<Maze>>) {
         }
     }
 }
-
-private fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
-    val height = message.board.height
-    val width = message.board.width
-    val board = Array(height) {Array(width) {Maze.UNVISITED} }
-    val bodies = message.board.snakes.flatMap { it.body }
-    val myTailCanCut = message.you.length == message.you.body.size
-    bodies.let {
-        return@let if (myTailCanCut) {
-            val myTail = message.you.body.last()
-            it.minus(myTail)
-        } else {
-            it
-        }
-    }.forEach {
-        board[it.y][it.x] = Maze.SNAKE
-    }
-    return board
-}
-
-enum class Maze {VISITED, UNVISITED, SNAKE}

@@ -17,7 +17,7 @@ class HeadCollisionFilter: DirectionFilter {
             val myHead = message.you.head
             val mySize = message.you.length
             val enemiesWithHeadAndSize = message.board.snakes
-                .filter { it.head != myHead }
+                .filterNot { it.head == myHead }
                 .map { Pair(it.head, it.length) }
             for (direction in validDirections) {
                 val possibleDestination = myHead.neighbour(direction)
@@ -39,9 +39,9 @@ class HeadCollisionFilter: DirectionFilter {
                     }
                 }
                 if (isThereStrongSnake) {
-                    moves.merge(direction, 2, Int::minus)
+                    moves.merge(direction, 3, Int::minus)
                 } else if (isThereMiddleSnake) {
-                    moves.merge(direction, 1, Int::minus)
+                    moves.merge(direction, 2, Int::minus)
                 } else if (isThereWeakSnake) {
                     moves.merge(direction, 1, Int::plus)
                 }
