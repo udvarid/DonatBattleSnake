@@ -13,7 +13,13 @@ class DirectionService(val filters: List<DirectionFilter>) {
         filters.forEach {
             it.filter(moves, message)
         }
-        return moves
+        return moves.let {
+            if (it.isEmpty()) {
+                Direction.values().associateWith { 1 }.toMutableMap()
+            } else {
+                it
+            }
+        }
             .toList()
             .filter { it.second == moves.values.maxOrNull() }
             .map { it.first }

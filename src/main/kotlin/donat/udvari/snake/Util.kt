@@ -1,5 +1,6 @@
 package donat.udvari.snake
 
+import donat.udvari.snake.model.Coordinate
 import donat.udvari.snake.model.PostMessage
 
 const val HEALTH_WEAK_LIMIT = 75
@@ -9,19 +10,23 @@ fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
     val height = message.board.height
     val width = message.board.width
     val board = Array(height) {Array(width) {Maze.UNVISITED} }
-    val bodies = message.board.snakes.flatMap { it.body }
-    val myTailCanCut = message.you.length == message.you.body.size
-    bodies.let {
-        return@let if (myTailCanCut) {
-            val myTail = message.you.body.last()
-            it.minus(myTail)
-        } else {
-            it
-        }
-    }.forEach {
+    val bodies = getBodies(message)
+    bodies.forEach {
         board[it.y][it.x] = Maze.SNAKE
     }
     return board
+}
+
+fun getBodies(message: PostMessage): List<Coordinate> {
+    return message.board.snakes
+        .flatMap {
+            val tailCanCut = it.length == it.body.size
+            if (tailCanCut) {
+                it.body.subList(0, it.body.lastIndex)
+            } else {
+                it.body
+            }
+        }
 }
 
 fun amITheStrongest(message: PostMessage): Boolean {
