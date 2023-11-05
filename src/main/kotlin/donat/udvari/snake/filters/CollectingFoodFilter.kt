@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
     Collection food when energy is low
  */
 @Service
-@Order(5)
+@Order(7)
 class CollectingFoodFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         val healthLimit = if (amITheStrongest(message)) HEALTH_STRONG_LIMIT else HEALTH_WEAK_LIMIT

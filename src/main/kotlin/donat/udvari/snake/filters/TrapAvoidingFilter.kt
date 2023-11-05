@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 Avoiding moves where the snake could be trapped
  */
 @Service
-@Order(7)
+@Order(5)
 class TrapAvoidingFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         val validDirections = moves.toList().filter { it.second >= 0 }.map { it.first }

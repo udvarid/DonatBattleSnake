@@ -1,5 +1,6 @@
 package donat.udvari.snake.filters
 
+import donat.udvari.snake.STRONGER_SNAKE_DISTANCE
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
@@ -25,15 +26,17 @@ class SnakeCatchFilter: DirectionFilter {
             val closestAndStrongestSnake = enemiesWithDistance
                 .filter { it.third == closestDistance }
                 .maxByOrNull { it.second }!!
-            val enemyIsStronger = closestAndStrongestSnake.second > mySize
+            val enemyIsStronger = closestAndStrongestSnake.second >= mySize
             val enemyIsWeaker = closestAndStrongestSnake.second < mySize
-            if (enemyIsStronger || enemyIsWeaker) {
-                for (direction in validDirections) {
-                    val possibleDestination = myHead.neighbour(direction)
-                    if (enemyIsStronger && closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first) ||
-                        enemyIsWeaker && closestAndStrongestSnake.third > possibleDestination.distance(closestAndStrongestSnake.first)) {
-                        moves.merge(direction, 1, Int::plus)
-                    }
+            for (direction in validDirections) {
+                val possibleDestination = myHead.neighbour(direction)
+                if (enemyIsStronger &&
+                    STRONGER_SNAKE_DISTANCE >= closestAndStrongestSnake.third &&
+                    closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first)
+                    ||
+                    enemyIsWeaker &&
+                    closestAndStrongestSnake.third > possibleDestination.distance(closestAndStrongestSnake.first)) {
+                    moves.merge(direction, 1, Int::plus)
                 }
             }
         }
