@@ -1,5 +1,6 @@
 package donat.udvari.snake.filters
 
+import donat.udvari.snake.SAME_SNAKE_DISTANCE
 import donat.udvari.snake.STRONGER_SNAKE_DISTANCE
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
@@ -26,12 +27,17 @@ class SnakeCatchFilter: DirectionFilter {
             val closestAndStrongestSnake = enemiesWithDistance
                 .filter { it.third == closestDistance }
                 .maxByOrNull { it.second }!!
-            val enemyIsStronger = closestAndStrongestSnake.second >= mySize
+            val enemyIsStronger = closestAndStrongestSnake.second > mySize
+            val enemyIsSame = closestAndStrongestSnake.second == mySize
             val enemyIsWeaker = closestAndStrongestSnake.second < mySize
             for (direction in validDirections) {
                 val possibleDestination = myHead.neighbour(direction)
                 if (enemyIsStronger &&
                     STRONGER_SNAKE_DISTANCE >= closestAndStrongestSnake.third &&
+                    closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first)
+                    ||
+                    enemyIsSame &&
+                    SAME_SNAKE_DISTANCE >= closestAndStrongestSnake.third &&
                     closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first)
                     ||
                     enemyIsWeaker &&

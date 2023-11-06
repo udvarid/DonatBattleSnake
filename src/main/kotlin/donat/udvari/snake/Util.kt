@@ -5,7 +5,8 @@ import donat.udvari.snake.model.PostMessage
 
 const val HEALTH_WEAK_LIMIT = 75
 const val HEALTH_STRONG_LIMIT = 50
-const val STRONGER_SNAKE_DISTANCE = 5
+const val STRONGER_SNAKE_DISTANCE = 4
+const val SAME_SNAKE_DISTANCE = 3
 
 fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
     val height = message.board.height
