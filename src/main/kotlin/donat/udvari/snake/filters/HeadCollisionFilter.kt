@@ -16,6 +16,7 @@ class HeadCollisionFilter: DirectionFilter {
         if (validDirections.size > 1) {
             val myHead = message.you.head
             val mySize = message.you.length
+            val allFood = message.board.food
             val enemiesWithHeadAndSize = message.board.snakes
                 .filterNot { it.head == myHead }
                 .map { Pair(it.head, it.length) }
@@ -25,6 +26,7 @@ class HeadCollisionFilter: DirectionFilter {
                 var isThereWeakSnake = false
                 var isThereMiddleSnake = false
                 var isThereStrongSnake = false
+                val foodExtra = if (allFood.contains(possibleDestination)) 1 else 0
                 for (coordinateToCheck in coordinatesToCheck) {
                     enemiesWithHeadAndSize.forEach {
                         if (it.first == coordinateToCheck) {
@@ -39,11 +41,11 @@ class HeadCollisionFilter: DirectionFilter {
                     }
                 }
                 if (isThereStrongSnake) {
-                    moves.merge(direction, 3, Int::minus)
+                    moves.merge(direction, 3 + foodExtra, Int::minus)
                 } else if (isThereMiddleSnake) {
-                    moves.merge(direction, 2, Int::minus)
+                    moves.merge(direction, 2 + foodExtra, Int::minus)
                 } else if (isThereWeakSnake) {
-                    moves.merge(direction, 1, Int::plus)
+                    moves.merge(direction, 1 + foodExtra, Int::plus)
                 }
             }
         }

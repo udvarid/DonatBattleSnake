@@ -3,6 +3,7 @@ package donat.udvari.snake.filters
 import donat.udvari.snake.HEALTH_STRONG_LIMIT
 import donat.udvari.snake.HEALTH_WEAK_LIMIT
 import donat.udvari.snake.amITheStrongest
+import donat.udvari.snake.amITheWeakest
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service
 class CollectingFoodFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         val healthLimit = if (amITheStrongest(message)) HEALTH_STRONG_LIMIT else HEALTH_WEAK_LIMIT
+        val weakestExtra = if (amITheWeakest(message)) 1 else 0
         if (message.you.health < healthLimit) {
             val validDirections = moves.toList().filter { it.second >= 0 }.map { it.first }
             if (validDirections.size > 1) {
@@ -26,7 +28,7 @@ class CollectingFoodFilter: DirectionFilter {
                     for (direction in validDirections) {
                         val possibleDestination = myHead.neighbour(direction)
                         if (closestFood.second > possibleDestination.distance(closestFood.first)) {
-                            moves.merge(direction, 1, Int::plus)
+                            moves.merge(direction, 1 + weakestExtra, Int::plus)
                         }
                     }
                 }

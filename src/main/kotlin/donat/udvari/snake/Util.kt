@@ -38,5 +38,11 @@ fun amITheStrongest(message: PostMessage): Boolean {
     return message.you.length > strongestEnemy
 }
 
+fun amITheWeakest(message: PostMessage): Boolean {
+    val weakestEnemy = message.board.snakes
+        .filterNot { it.head == message.you.head }
+        .minOf { it.length }
+    return message.you.length <= weakestEnemy
+}
 
 enum class Maze {VISITED, UNVISITED, SNAKE}
