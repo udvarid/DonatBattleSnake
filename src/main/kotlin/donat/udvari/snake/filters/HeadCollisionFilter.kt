@@ -1,5 +1,6 @@
 package donat.udvari.snake.filters
 
+import donat.udvari.snake.getEnemySnakes
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
@@ -17,8 +18,7 @@ class HeadCollisionFilter: DirectionFilter {
             val myHead = message.you.head
             val mySize = message.you.length
             val allFood = message.board.food
-            val enemiesWithHeadAndSize = message.board.snakes
-                .filterNot { it.head == myHead }
+            val enemiesWithHeadAndSize = getEnemySnakes(message)
                 .map { Pair(it.head, it.length) }
             for (direction in validDirections) {
                 val possibleDestination = myHead.neighbour(direction)

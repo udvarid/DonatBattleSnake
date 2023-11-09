@@ -2,6 +2,7 @@ package donat.udvari.snake.filters
 
 import donat.udvari.snake.SAME_SNAKE_DISTANCE
 import donat.udvari.snake.STRONGER_SNAKE_DISTANCE
+import donat.udvari.snake.getEnemySnakes
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
@@ -20,8 +21,7 @@ class SnakeCatchFilter: DirectionFilter {
         if (validDirections.size > 1) {
             val myHead = message.you.head
             val mySize = message.you.length
-            val enemiesWithDistance = message.board.snakes
-                .filterNot { it.head == myHead }
+            val enemiesWithDistance = getEnemySnakes(message)
                 .map { Triple(it.head, it.length, it.head.distance(myHead)) }
             val closestDistance = enemiesWithDistance.minOf { it.third }
             val closestAndStrongestSnake = enemiesWithDistance
