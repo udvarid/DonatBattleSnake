@@ -21,30 +21,34 @@ class SnakeCatchFilter: DirectionFilter {
         if (validDirections.size > 1) {
             val myHead = message.you.head
             val mySize = message.you.length
-            val enemiesWithDistance = getEnemySnakes(message)
-                .map { Triple(it.head, it.length, it.head.distance(myHead)) }
-            val closestDistance = enemiesWithDistance.minOf { it.third }
-            val closestAndStrongestSnake = enemiesWithDistance
-                .filter { it.third == closestDistance }
-                .maxByOrNull { it.second }!!
-            val enemyIsStronger = closestAndStrongestSnake.second > mySize
-            val enemyIsSame = closestAndStrongestSnake.second == mySize
-            val enemyIsWeaker = closestAndStrongestSnake.second < mySize
-            for (direction in validDirections) {
-                val possibleDestination = myHead.neighbour(direction)
-                if (enemyIsStronger &&
-                    STRONGER_SNAKE_DISTANCE >= closestAndStrongestSnake.third &&
-                    closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first)
-                    ||
-                    enemyIsSame &&
-                    SAME_SNAKE_DISTANCE >= closestAndStrongestSnake.third &&
-                    closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first)
-                    ||
-                    enemyIsWeaker &&
-                    closestAndStrongestSnake.third > possibleDestination.distance(closestAndStrongestSnake.first)) {
-                    moves.merge(direction, 1, Int::plus)
+            val enemies = getEnemySnakes(message)
+            if (enemies.isNotEmpty()) {
+                val enemiesWithDistance = enemies
+                    .map { Triple(it.head, it.length, it.head.distance(myHead)) }
+                val closestDistance = enemiesWithDistance.minOf { it.third }
+                val closestAndStrongestSnake = enemiesWithDistance
+                    .filter { it.third == closestDistance }
+                    .maxByOrNull { it.second }!!
+                val enemyIsStronger = closestAndStrongestSnake.second > mySize
+                val enemyIsSame = closestAndStrongestSnake.second == mySize
+                val enemyIsWeaker = closestAndStrongestSnake.second < mySize
+                for (direction in validDirections) {
+                    val possibleDestination = myHead.neighbour(direction)
+                    if (enemyIsStronger &&
+                        STRONGER_SNAKE_DISTANCE >= closestAndStrongestSnake.third &&
+                        closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first)
+                        ||
+                        enemyIsSame &&
+                        SAME_SNAKE_DISTANCE >= closestAndStrongestSnake.third &&
+                        closestAndStrongestSnake.third < possibleDestination.distance(closestAndStrongestSnake.first)
+                        ||
+                        enemyIsWeaker &&
+                        closestAndStrongestSnake.third > possibleDestination.distance(closestAndStrongestSnake.first)) {
+                        moves.merge(direction, 1, Int::plus)
+                    }
                 }
             }
+
         }
     }
 }

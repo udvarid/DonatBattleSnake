@@ -35,14 +35,14 @@ fun getBodies(message: PostMessage): List<Coordinate> {
 
 fun amITheStrongest(message: PostMessage): Boolean {
     val strongestEnemy = getEnemySnakes(message)
-        .maxOf { it.length }
-    return message.you.length > strongestEnemy
+        .maxOfOrNull { it.length }
+    return if (strongestEnemy == null) true else message.you.length > strongestEnemy
 }
 
 fun amITheWeakest(message: PostMessage): Boolean {
     val weakestEnemy = getEnemySnakes(message)
-        .minOf { it.length }
-    return message.you.length <= weakestEnemy
+        .minOfOrNull { it.length }
+    return if (weakestEnemy == null) false else message.you.length <= weakestEnemy
 }
 
 fun getEnemySnakes(message: PostMessage): List<Snake> =
