@@ -1,6 +1,6 @@
 package donat.udvari.snake.filters
 
-import donat.udvari.snake.getBodies
+import donat.udvari.snake.util.getBodies
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order

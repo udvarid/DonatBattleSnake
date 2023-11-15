@@ -3,6 +3,7 @@ package donat.udvari.snake.filters
 import donat.udvari.snake.model.Coordinate
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
+import donat.udvari.snake.util.getPath
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 
@@ -20,7 +21,8 @@ class CentrumOrientationFilter: DirectionFilter {
             val myHead = message.you.head
             val center = Coordinate(message.board.width / 2, message.board.height / 2)
             val weightedDirections = validDirections
-                .map { direction -> Pair(direction, myHead.neighbour(direction).distance(center)) }
+                .map { direction -> Pair(direction, getPath(myHead.neighbour(direction), center, message).size) }
+                .filter { it.second > 0 }
 
             weightedDirections
                 .filter { pair -> pair.second == weightedDirections.minOf { it.second } }

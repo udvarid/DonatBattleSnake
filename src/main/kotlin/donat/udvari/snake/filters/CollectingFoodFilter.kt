@@ -1,11 +1,8 @@
 package donat.udvari.snake.filters
 
-import donat.udvari.snake.HEALTH_STRONG_LIMIT
-import donat.udvari.snake.HEALTH_WEAK_LIMIT
-import donat.udvari.snake.amITheStrongest
-import donat.udvari.snake.amITheWeakest
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
+import donat.udvari.snake.util.*
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 
@@ -24,11 +21,14 @@ class CollectingFoodFilter: DirectionFilter {
                 val myHead = message.you.head
                 val food = message.board.food
                 if (food.isNotEmpty()) {
-                    val closestFood = food.map { Pair(it, it.distance(myHead))}.minByOrNull { it.second }!!
-                    for (direction in validDirections) {
-                        val possibleDestination = myHead.neighbour(direction)
-                        if (closestFood.second > possibleDestination.distance(closestFood.first)) {
-                            moves.merge(direction, 1 + weakestExtra, Int::plus)
+                    val closestPath = food.map { getPath(myHead, it, message) }.filter { it.isNotEmpty() }.minByOrNull { it.size }
+                    closestPath?.let {
+                        val nextStep = it[1]
+                        for (direction in validDirections) {
+                            val possibleDestination = myHead.neighbour(direction)
+                            if (possibleDestination == nextStep) {
+                                moves.merge(direction, 1 + weakestExtra, Int::plus)
+                            }
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-package donat.udvari.snake
+package donat.udvari.snake.util
 
 import donat.udvari.snake.model.Coordinate
 import donat.udvari.snake.model.PostMessage
@@ -12,7 +12,7 @@ const val SAME_SNAKE_DISTANCE = 3
 fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
     val height = message.board.height
     val width = message.board.width
-    val board = Array(height) {Array(width) {Maze.UNVISITED} }
+    val board = Array(height) {Array(width) { Maze.UNVISITED } }
     val bodies = getBodies(message)
     bodies.forEach {
         board[it.y][it.x] = Maze.SNAKE

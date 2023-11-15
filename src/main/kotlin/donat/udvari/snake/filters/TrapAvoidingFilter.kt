@@ -1,7 +1,7 @@
 package donat.udvari.snake.filters
 
-import donat.udvari.snake.Maze
-import donat.udvari.snake.getInitBoard
+import donat.udvari.snake.util.Maze
+import donat.udvari.snake.util.getInitBoard
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
 import org.springframework.core.annotation.Order
