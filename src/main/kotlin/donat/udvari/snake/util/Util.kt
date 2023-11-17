@@ -8,6 +8,7 @@ const val HEALTH_WEAK_LIMIT = 75
 const val HEALTH_STRONG_LIMIT = 50
 const val STRONGER_SNAKE_DISTANCE = 4
 const val SAME_SNAKE_DISTANCE = 3
+const val END_GAME_LENGHT_LIMIT = 10
 
 fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
     val height = message.board.height

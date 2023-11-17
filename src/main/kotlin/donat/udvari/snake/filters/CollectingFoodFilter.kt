@@ -13,7 +13,8 @@ import org.springframework.stereotype.Service
 @Order(7)
 class CollectingFoodFilter: DirectionFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
-        val healthLimit = if (amITheStrongest(message)) HEALTH_STRONG_LIMIT else HEALTH_WEAK_LIMIT
+        val extraLimit = if (message.you.length < END_GAME_LENGHT_LIMIT) 15 else 0
+        val healthLimit = (if (amITheStrongest(message)) HEALTH_STRONG_LIMIT else HEALTH_WEAK_LIMIT) + extraLimit
         val weakestExtra = if (amITheWeakest(message)) 1 else 0
         if (message.you.health < healthLimit) {
             val validDirections = moves.toList().filter { it.second >= 0 }.map { it.first }
