@@ -4,8 +4,8 @@ import donat.udvari.snake.model.Coordinate
 import donat.udvari.snake.model.PostMessage
 import java.util.*
 
-fun getPath(start: Coordinate, goal: Coordinate, message: PostMessage): List<Coordinate> {
-    val bodies = getBodies(message)
+fun getPath(start: Coordinate, goal: Coordinate? = null, message: PostMessage, removeHeads: Boolean = false): List<Coordinate> {
+    val bodies = getBodies(message, removeHeads)
     val paths: MutableMap<Coordinate, Coordinate> = mutableMapOf()
     val myQueue: Queue<Coordinate> = LinkedList()
     val height = message.board.height
@@ -33,7 +33,7 @@ fun getPath(start: Coordinate, goal: Coordinate, message: PostMessage): List<Coo
             }
     }
 
-    if (paths.containsKey(goal)) {
+    if (goal != null && paths.containsKey(goal)) {
         val myPath: MutableList<Coordinate> = mutableListOf()
         myPath.add(goal)
         var current = paths[goal]
@@ -43,6 +43,10 @@ fun getPath(start: Coordinate, goal: Coordinate, message: PostMessage): List<Coo
         }
         myPath.reverse()
         return myPath
+    }
+
+    if (goal == null) {
+        return paths.keys.toList()
     }
 
     return emptyList()

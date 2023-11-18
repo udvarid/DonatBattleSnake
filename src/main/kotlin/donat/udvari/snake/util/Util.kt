@@ -8,7 +8,7 @@ const val HEALTH_WEAK_LIMIT = 75
 const val HEALTH_STRONG_LIMIT = 50
 const val STRONGER_SNAKE_DISTANCE = 4
 const val SAME_SNAKE_DISTANCE = 3
-const val END_GAME_LENGHT_LIMIT = 10
+const val END_GAME_LENGTH_LIMIT = 10
 
 fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
     val height = message.board.height
@@ -21,9 +21,9 @@ fun getInitBoard(message: PostMessage): Array<Array<Maze>> {
     return board
 }
 
-fun getBodies(message: PostMessage): List<Coordinate> {
+fun getBodies(message: PostMessage, removeHeads: Boolean = false): List<Coordinate> {
     val isItConstrictor = message.game.ruleset.name == "constrictor"
-    return message.board.snakes
+    val result = message.board.snakes
         .flatMap {
             val tailCanCut = it.length == it.body.size
             if (!isItConstrictor && tailCanCut) {
@@ -32,6 +32,14 @@ fun getBodies(message: PostMessage): List<Coordinate> {
                 it.body
             }
         }
+        .distinct()
+    return if (removeHeads) {
+        val myHead = message.you.head
+        val enemyHeads = message.board.snakes.map { it.head }.filterNot { it == myHead }.toSet()
+        result.minus(enemyHeads)
+    } else {
+        result
+    }
 }
 
 fun amITheStrongest(message: PostMessage): Boolean {
