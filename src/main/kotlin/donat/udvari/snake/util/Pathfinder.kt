@@ -4,8 +4,13 @@ import donat.udvari.snake.model.Coordinate
 import donat.udvari.snake.model.PostMessage
 import java.util.*
 
-fun getPath(start: Coordinate, goal: Coordinate? = null, message: PostMessage, removeHeads: Boolean = false): List<Coordinate> {
-    val bodies = getBodies(message, removeHeads)
+fun getPath(start: Coordinate,
+            goal: Coordinate? = null,
+            message: PostMessage,
+            removeHeads: Boolean = false,
+            coordinatesToAvoid: List<Coordinate> = emptyList()
+): List<Coordinate> {
+    val bodies = getBodies(message, removeHeads).minus(coordinatesToAvoid.toSet())
     val paths: MutableMap<Coordinate, Coordinate> = mutableMapOf()
     val myQueue: Queue<Coordinate> = LinkedList()
     val height = message.board.height

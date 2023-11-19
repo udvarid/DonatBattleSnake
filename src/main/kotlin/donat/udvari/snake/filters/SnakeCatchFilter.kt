@@ -49,22 +49,33 @@ class SnakeCatchFilter: DirectionFilter {
                             val areaOfEnemy = getPath(start = closestAndStrongestSnake.first, message = message)
                             val farthestCoordinateFromEnemy = areaOfEnemy.maxByOrNull { it.distance(closestAndStrongestSnake.first) }
                             farthestCoordinateFromEnemy?.let {
-                                val fleePath = getPath(start = myHead, goal = it, message = message, removeHeads = true)
+                                val possibleDestinations = validDirections.map { direction ->  Pair(direction, myHead.neighbour(direction)) }
+                                val coordinatesToAvoid = possibleDestinations
+                                    .map { d -> d.second }
+                                    .filter { d -> myHead.distance(closestAndStrongestSnake.first) > d.distance(closestAndStrongestSnake.first) }
+
+                                if (coordinatesToAvoid.isNotEmpty()) {
+                                    println("d")
+                                }
+
+                                val fleePath = getPath(
+                                    start = myHead,
+                                    goal = it,
+                                    message = message,
+                                    removeHeads = true,
+                                    coordinatesToAvoid = coordinatesToAvoid
+                                )
                                 if (fleePath.isNotEmpty()) {
                                     val nextStep = fleePath[1]
-                                    for (direction in validDirections) {
-                                        val possibleDestination = myHead.neighbour(direction)
-                                        if (possibleDestination == nextStep) {
-                                            moves.merge(direction, 1, Int::plus)
+                                    possibleDestinations
+                                        .findLast { destination -> destination.second == nextStep }
+                                        ?.let {destination ->
+                                            moves.merge(destination.first, 1, Int::plus)
                                         }
-                                    }
                                 } else {
-                                    for (direction in validDirections) {
-                                        val possibleDestination = myHead.neighbour(direction)
-                                        if (closestAndStrongestSnake.third.size < possibleDestination.distance(closestAndStrongestSnake.first)) {
-                                            moves.merge(direction, 1, Int::plus)
-                                        }
-                                    }
+                                    possibleDestinations
+                                        .filter { d -> myHead.distance(closestAndStrongestSnake.first) < d.second.distance(closestAndStrongestSnake.first) }
+                                        .forEach { d -> moves.merge(d.first, 1, Int::plus) }
                                 }
                             }
                     }
