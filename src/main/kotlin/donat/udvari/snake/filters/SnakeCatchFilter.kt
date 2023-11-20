@@ -54,10 +54,6 @@ class SnakeCatchFilter: DirectionFilter {
                                     .map { d -> d.second }
                                     .filter { d -> myHead.distance(closestAndStrongestSnake.first) > d.distance(closestAndStrongestSnake.first) }
 
-                                if (coordinatesToAvoid.isNotEmpty()) {
-                                    println("d")
-                                }
-
                                 val fleePath = getPath(
                                     start = myHead,
                                     goal = it,
@@ -65,17 +61,18 @@ class SnakeCatchFilter: DirectionFilter {
                                     removeHeads = true,
                                     coordinatesToAvoid = coordinatesToAvoid
                                 )
+                                val fleeExtra = if (enemyIsStronger) 1 else 0
                                 if (fleePath.isNotEmpty()) {
                                     val nextStep = fleePath[1]
                                     possibleDestinations
                                         .findLast { destination -> destination.second == nextStep }
                                         ?.let {destination ->
-                                            moves.merge(destination.first, 1, Int::plus)
+                                            moves.merge(destination.first, 1 + fleeExtra, Int::plus)
                                         }
                                 } else {
                                     possibleDestinations
                                         .filter { d -> myHead.distance(closestAndStrongestSnake.first) < d.second.distance(closestAndStrongestSnake.first) }
-                                        .forEach { d -> moves.merge(d.first, 1, Int::plus) }
+                                        .forEach { d -> moves.merge(d.first, 1 + fleeExtra, Int::plus) }
                                 }
                             }
                     }

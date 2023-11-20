@@ -58,3 +58,5 @@ fun getEnemySnakes(message: PostMessage): List<Snake> =
     message.board.snakes.filterNot { it.head == message.you.head }
 
 enum class Maze {VISITED, UNVISITED, SNAKE}
+
+data class SnakeHunt(val head: Coordinate, val length: Int, val origFreedom: Int, val newFreedom: Int? = null)

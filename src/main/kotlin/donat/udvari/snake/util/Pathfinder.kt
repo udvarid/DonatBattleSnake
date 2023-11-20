@@ -10,7 +10,7 @@ fun getPath(start: Coordinate,
             removeHeads: Boolean = false,
             coordinatesToAvoid: List<Coordinate> = emptyList()
 ): List<Coordinate> {
-    val bodies = getBodies(message, removeHeads).minus(coordinatesToAvoid.toSet())
+    val bodies = getBodies(message, removeHeads).plus(coordinatesToAvoid.toSet())
     val paths: MutableMap<Coordinate, Coordinate> = mutableMapOf()
     val myQueue: Queue<Coordinate> = LinkedList()
     val height = message.board.height

@@ -10,9 +10,8 @@ import org.springframework.stereotype.Service
 /**
 When snake has more possibilities, it goes to the center
  */
-@Service
-@Order(10)
-class CentrumOrientationFilter: DirectionFilter {
+@Service("centrumOrientationFilter")
+class CentrumOrientationFilter: EndGameFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         val validDirections = moves
             .filter { it.value == moves.values.maxOrNull() }

@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service
 /**
 Choosing the destination with more further free cells to move
  */
-@Service
-@Order(9)
-class MorePossibleFurtherStepsFilter: DirectionFilter {
+@Service("morePossibleFurtherStepsFilter")
+class MorePossibleFurtherStepsFilter: EndGameFilter {
     override fun filter(moves: MutableMap<Direction, Int>, message: PostMessage) {
         val validDirections = moves
             .filter { it.value == moves.values.maxOrNull() }
