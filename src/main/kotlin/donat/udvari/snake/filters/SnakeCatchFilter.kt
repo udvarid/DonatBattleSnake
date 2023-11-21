@@ -39,7 +39,7 @@ class SnakeCatchFilter: DirectionFilter {
                         for (direction in validDirections) {
                             val possibleDestination = myHead.neighbour(direction)
                             val nextStep = closestAndStrongestSnake.third[1]
-                            if (possibleDestination == nextStep) {
+                            if (possibleDestination == nextStep && !message.board.hazards.contains(nextStep)) {
                                 moves.merge(direction, 1, Int::plus)
                             }
                         }
@@ -53,12 +53,15 @@ class SnakeCatchFilter: DirectionFilter {
                                     .map { d -> d.second }
                                     .filter { d -> myHead.distance(closestAndStrongestSnake.first) > d.distance(closestAndStrongestSnake.first) }
 
+                                val isItRoyale = message.game.ruleset.name == "royale"
+                                val hazardCells = if (isItRoyale) message.board.hazards else emptyList()
+
                                 val fleePath = getPath(
                                     start = myHead,
                                     goal = it,
                                     message = message,
                                     removeHeads = true,
-                                    coordinatesToAvoid = coordinatesToAvoid
+                                    coordinatesToAvoid = coordinatesToAvoid.plus(hazardCells).distinct()
                                 )
                                 val fleeExtra = if (enemyIsStronger) 1 else 0
                                 if (fleePath.isNotEmpty()) {
