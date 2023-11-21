@@ -1,11 +1,8 @@
 package donat.udvari.snake.filters
 
-import donat.udvari.snake.util.SAME_SNAKE_DISTANCE
-import donat.udvari.snake.util.STRONGER_SNAKE_DISTANCE
-import donat.udvari.snake.util.getEnemySnakes
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
-import donat.udvari.snake.util.getPath
+import donat.udvari.snake.util.*
 import org.springframework.core.annotation.Order
 import org.springframework.stereotype.Service
 
@@ -36,6 +33,8 @@ class SnakeCatchFilter: DirectionFilter {
                     val enemyIsSame = closestAndStrongestSnake.second == mySize
                     val enemyIsWeaker = closestAndStrongestSnake.second < mySize
 
+                    val amIGrownUp = message.you.length >= END_GAME_LENGTH_LIMIT
+
                     if (enemyIsWeaker) {
                         for (direction in validDirections) {
                             val possibleDestination = myHead.neighbour(direction)
@@ -44,8 +43,8 @@ class SnakeCatchFilter: DirectionFilter {
                                 moves.merge(direction, 1, Int::plus)
                             }
                         }
-                    } else if (enemyIsStronger && STRONGER_SNAKE_DISTANCE >= closestAndStrongestSnake.third.size ||
-                        enemyIsSame && SAME_SNAKE_DISTANCE >= closestAndStrongestSnake.third.size) {
+                    } else if (!amIGrownUp && (enemyIsStronger && STRONGER_SNAKE_DISTANCE >= closestAndStrongestSnake.third.size ||
+                        enemyIsSame && SAME_SNAKE_DISTANCE >= closestAndStrongestSnake.third.size)) {
                             val areaOfEnemy = getPath(start = closestAndStrongestSnake.first, message = message)
                             val farthestCoordinateFromEnemy = areaOfEnemy.maxByOrNull { it.distance(closestAndStrongestSnake.first) }
                             farthestCoordinateFromEnemy?.let {

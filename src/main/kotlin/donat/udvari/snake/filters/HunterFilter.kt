@@ -2,6 +2,7 @@ package donat.udvari.snake.filters
 
 import donat.udvari.snake.model.Direction
 import donat.udvari.snake.model.PostMessage
+import donat.udvari.snake.util.FREEDOM_MULTIPLICATOR
 import donat.udvari.snake.util.SnakeHunt
 import donat.udvari.snake.util.getEnemySnakes
 import donat.udvari.snake.util.getPath
@@ -20,7 +21,7 @@ class HunterFilter: EndGameFilter {
             val myHead = message.you.head
             val enemiesWithFreedom = getEnemySnakes(message)
                 .map { SnakeHunt(it.head, it.length, getPath(start = it.head, message = message).size) }
-                .filter { it.length * 1.5 < it.origFreedom }
+                .filter { it.length * FREEDOM_MULTIPLICATOR < it.origFreedom }
             for (direction in validDirections) {
                 val possibleDestination = myHead.neighbour(direction)
                 val successHunting = enemiesWithFreedom
