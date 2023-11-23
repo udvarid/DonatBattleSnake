@@ -22,7 +22,7 @@ class CollectingFoodFilter: DirectionFilter {
                 val myHead = message.you.head
                 val food = message.board.food
                 if (food.isNotEmpty()) {
-                    val isItRoyale = message.game.ruleset.name == "royale"
+                    val isItRoyale = message.game.map == "royale"
                     val hazardsToAvoid = if (isItRoyale) message.board.hazards else emptyList()
                     val closestPath = food.map { getPath(start = myHead, goal = it, message = message, coordinatesToAvoid = hazardsToAvoid) }
                         .filter { it.isNotEmpty() }
