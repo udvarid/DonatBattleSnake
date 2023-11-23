@@ -53,7 +53,7 @@ class SnakeCatchFilter: DirectionFilter {
                                     .map { d -> d.second }
                                     .filter { d -> myHead.distance(closestAndStrongestSnake.first) > d.distance(closestAndStrongestSnake.first) }
 
-                                val isItRoyale = message.game.ruleset.name == "royale"
+                                val isItRoyale = message.game.map == "royale"
                                 val hazardCells = if (isItRoyale) message.board.hazards else emptyList()
 
                                 val fleePath = getPath(
